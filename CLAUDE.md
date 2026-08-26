@@ -29,6 +29,7 @@ dependency manifest, no build step, no test runner.
 ```
 app/modules/
   add_funds/controllers/tegro.php              # gateway controller (redirect + IPN webhook)
+  add_funds/views/tegro/index.php              # customer-facing tab on /add_funds (amount form)
   admin/views/payments/integrations/tegro.php   # admin key-entry form (partial view)
 sql/
   install.sql                                   # creates tegro_orders (InnoDB) + payments row
@@ -52,6 +53,11 @@ app/modules/add_funds/controllers/tegro.php
   - ipn()                  — step 2: webhook handler at /tegro_ipn
   - api_order_status()     — the actual credit gate (signed API re-check)
   - verify_hook_sign()     — webhook signature check (logged, not authoritative)
+
+app/modules/add_funds/views/tegro/index.php
+  - Customer tab rendered by the engine via load->view(type.'/index').
+    REQUIRED: without it /add_funds dies with "Unable to load the requested
+    file: tegro/index.php".
 
 app/modules/admin/views/payments/integrations/tegro.php
   - Admin form partial: Shop ID / Secret Key / API Key / Environment /
