@@ -181,6 +181,12 @@ class tegro extends MX_Controller
             ]]],
         ]);
 
+        // e-mail пользователя — чтобы форма провайдера не спрашивала его заново (fields[email], вне подписи)
+        $user_row = $this->db->select('email')->get_where($this->tb_users, ['id' => $uid])->row();
+        if ($user_row && filter_var((string) $user_row->email, FILTER_VALIDATE_EMAIL)) {
+            $query['fields'] = ['email' => (string) $user_row->email];
+        }
+
         $redirect_url = self::PAY_URL . '?' . http_build_query($query);
 
         if ($this->input->is_ajax_request()) {
