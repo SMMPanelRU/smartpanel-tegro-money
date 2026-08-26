@@ -14,9 +14,10 @@
 
 ## Установка
 
-1. Скопируйте два PHP-файла в те же пути внутри корня панели (без изменения ядра):
+1. Скопируйте три PHP-файла в те же пути внутри корня панели (без изменения ядра):
    ```
    app/modules/add_funds/controllers/tegro.php
+   app/modules/add_funds/views/tegro/index.php
    app/modules/admin/views/payments/integrations/tegro.php
    ```
    Роут `/tegro_ipn` уже обрабатывается движком через общее правило `$route['(:any)_ipn']` — правки `routes.php` не требуются.
@@ -96,9 +97,10 @@ Tegro.Money payment gateway module for SmartPanel (CodeCanyon SmartPanel v4.x, C
 
 ## Installation
 
-1. Copy the two PHP files into the same paths inside your panel webroot (no core files are touched):
+1. Copy the three PHP files into the same paths inside your panel webroot (no core files are touched):
    ```
    app/modules/add_funds/controllers/tegro.php
+   app/modules/add_funds/views/tegro/index.php
    app/modules/admin/views/payments/integrations/tegro.php
    ```
    The engine's generic route `$route['(:any)_ipn']` already maps `/tegro_ipn` to this controller — no `routes.php` edits needed.
