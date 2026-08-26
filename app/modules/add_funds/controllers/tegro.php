@@ -54,7 +54,9 @@ class tegro extends MX_Controller
         $this->tb_payments         = PAYMENTS_METHOD;
         $this->tb_payments_bonuses = PAYMENTS_BONUSES;
         $this->tb_orders           = 'tegro_orders';
-        $this->payment_type        = 'tegro';
+        if (!$this->payment_type) {
+            $this->payment_type = 'tegro'; // подклассы (второй метод на том же шлюзе) задают свой type до parent::__construct
+        }
 
         $this->currency_code = get_option("currency_code", "USD");
         if ($this->currency_code == "") {
@@ -168,7 +170,15 @@ class tegro extends MX_Controller
             'lang'        => (strtolower((string) get_option('language', 'ru')) === 'en') ? 'en' : 'ru',
             'success_url' => cn('add_funds/success'),
             'fail_url'    => cn('add_funds/unsuccess'),
-            'notify_url'  => cn('tegro_ipn'),
+            'notify_url'  => cn($this->payment_type . '_ipn'),
+            // состав заказа: у магазина может быть включена обязательная передача чека,
+            // без него провайдер отклоняет платёж («Не указан обязательный параметр receipt»).
+            // В подпись receipt не входит; сумма позиций обязана равняться amount.
+            'receipt'     => ['items' => [[
+                'name'  => 'Пополнение баланса',
+                'count' => 1,
+                'price' => $this->fmt($amount_shop),
+            ]]],
         ]);
 
         $redirect_url = self::PAY_URL . '?' . http_build_query($query);
